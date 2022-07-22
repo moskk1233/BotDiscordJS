@@ -18,7 +18,15 @@ const commands = [
     .setDescription("Reply Server Information"),
 
     new SlashCommandBuilder().setName("bot")
-    .setDescription("Bot Information")
+    .setDescription("Bot Information"),
+
+    new SlashCommandBuilder().setName("remove")
+    .setDescription("Remove Messages past 14 days")
+    .addNumberOption(number => 
+        number.setName("count")
+        .setDescription("Count Messages to remove")
+        .setRequired(true)
+        )
 ].map(command => command.toJSON())
 
 const rest = new REST({ version: "10"}).setToken(process.env.TOKEN)

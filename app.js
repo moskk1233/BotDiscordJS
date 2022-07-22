@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits } = require("discord.js")
 require("dotenv").config()
 
 // ประกาศตัวแปรคำสั่งบอท
-const client = new Client({ intents: GatewayIntentBits.Guilds })
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] })
 
 
 // ทำงานเมื่อเริ่มต้น
@@ -24,18 +24,16 @@ client.on("interactionCreate", async interaction => {
     // ส่งคำสั่ง user เพื่อดูข้อมูล user
     else if (interaction.commandName == "user") {
         const getUserInfo = interaction.options.getUser("user")
-        if (!getUserInfo) {
-            interaction.reply(
-                await interaction.reply(
-                    { content: `ชื่อ : ${interaction.user.tag}\nสร้างเมื่อ : <t:${interaction.user.createdTimestamp/1000}:F>`,
-                    ephemeral: true}
-                )
+        if (getUserInfo) {
+            await interaction.reply(
+                { content: `ชื่อ : ${getUserInfo.tag}\nสร้างเมื่อ : <t:${Math.floor(getUserInfo.createdTimestamp/1000)}:F>`,
+                ephemeral: true}
             )
         }
         else {
             await interaction.reply(
-                { content: `ชื่อ : ${getUserInfo.tag}\nสร้างเมื่อ : <t:${Math.floor(getUserInfo.createdTimestamp/1000)}:F>`,
-                ephemeral: true}
+                    { content: `ชื่อ : ${interaction.user.tag}\nสร้างเมื่อ : <t:${Math.floor(interaction.user.createdTimestamp/1000)}:F>`,
+                    ephemeral: true}
             )
         }
     }
@@ -49,15 +47,48 @@ client.on("interactionCreate", async interaction => {
     }
 
     // ส่งคำสั่ง botinfo เพื่อดูข้อมูล bot
-    else if (interaction.commandName == "botinfo") {
+    else if (interaction.commandName == "bot") {
         await interaction.reply(
-            { content: `บอทชื่อ : ${client.user.tag}\nสร้างเมื่อ : <t:${Math.floor(client.user.createdTimestamp/1000)}:F>`,
+            { content: `บอทชื่อ : ${client.user.tag}\nสร้างเมื่อ : <t:${Math.floor(client.user.createdTimestamp/1000)}:F>\nผู้สร้าง : Moskuza#5798`,
             ephemeral : true }
         )
     }
+
+    // ส่งคำสั่ง remove เพื่อลบข้อความตามจำนวนที่ระบุ
+    else if (interaction.commandName == "remove") {
+        const message_count = interaction.options.getNumber("count")
+        if (message_count) {
+            if (message_count > 0 && message_count <= 50) {
+                await interaction.channel.bulkDelete(message_count, true)
+                interaction.reply(
+                    { content: `${client.user.username} ได้ลบ ${message_count} ข้อความเรียบร้อยแล้ว`}
+                )
+                await sleep(5000)
+                await interaction.channel.lastMessage.delete()
+            }
+            else interaction.channel.send("คุณไม่สามารถลบข้อความได้เนื่องจากคุณลบข้อความเกิน 50 ข้อความ")
+        }
+        else {
+            await interaction.reply(
+                { content: "ไม่สามารถลบข้อความได้เนื่องจากคุณยังไม่ระบุจำนวนข้อความ"}
+            )
+        }
+    }
+})
+
+// เมื่อพิมพ์ข้อความบอทจะทำการลบข้อความและส่งใหม่อีกครั้ง
+client.on("messageCreate", async message => {
+    if (message.author.bot) return
+    message.delete()
+    await message.channel.send(`**${message.author.tag}**: ${message.content}`)
 })
 
 // ฟังก์ชั่นต่างๆ
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
 
 // สั่งเริ่มบอทดิสคอร์ด
 client.login(process.env.TOKEN)
