@@ -1,5 +1,5 @@
 // เรียกใช้โมดูล
-const { Client, GatewayIntentBits } = require("discord.js")
+const { Client, GatewayIntentBits, ActivityType } = require("discord.js")
 require("dotenv").config()
 
 // ประกาศตัวแปรคำสั่งบอท
@@ -9,12 +9,12 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 // ทำงานเมื่อเริ่มต้น
 client.on("ready", () => {
     console.log(`เปิดใช้งานบอท ${client.user.tag}`)
-    client
+    client.user.setActivity({ name: "Inky! Inky!" , type: ActivityType.Playing })
 })
 
 // ทำงานเพื่อมี Event interactionCreate
 client.on("interactionCreate", async interaction => {
-    if (!interaction.isChatInputCommand()) return
+    if (!interaction.isChatInputCommand()) return;
 
     // ส่งคำสั่ง ping
     if (interaction.commandName == "ping"){
@@ -23,16 +23,57 @@ client.on("interactionCreate", async interaction => {
 
     // ส่งคำสั่ง user เพื่อดูข้อมูล user
     else if (interaction.commandName == "user") {
-        const getUserInfo = interaction.options.getUser("user")
+        const getUserInfo = interaction.options.getMember("user")
         if (getUserInfo) {
+            if (!getUserInfo.user.avatarURL()) {
+                await interaction.reply(
+                    {
+                        embeds: [
+                            {
+                                title: `ข้อมูลของคุณ ${getUserInfo.user.tag}`,
+                                description: `ชื่อ: ${getUserInfo.user.tag}\nสร้างเมื่อ: <t:${Math.floor(getUserInfo.user.createdTimestamp/1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(getUserInfo.joinedTimestamp/1000)}:F>`
+                            }
+                        ],
+                        ephemeral: true
+                    }
+                )
+                return;
+            }
             await interaction.reply(
-                { content: `ชื่อ : ${getUserInfo.tag}\nสร้างเมื่อ : <t:${Math.floor(getUserInfo.createdTimestamp/1000)}:F>`,
-                ephemeral: true}
+                {
+                    embeds: [
+                        {
+                            title: `ข้อมูลของคุณ ${getUserInfo.user.tag}`,
+                            thumbnail: {
+                                url: `${getUserInfo.user.avatarURL({ extension: "png" })}`
+                            },
+                            description: `ชื่อ: ${getUserInfo.user.tag}\nสร้างเมื่อ: <t:${Math.floor(getUserInfo.user.createdTimestamp/1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(getUserInfo.joinedTimestamp/1000)}:F>`
+                        }
+                    ],
+                    ephemeral: true
+                }
             )
         }
+        
         else {
+            if (!interaction.user.avatarURL()) {
+                await interaction.reply(
+                    { embeds: [{
+                        title: `ข้อมูลของคุณ ${interaction.user.tag}`,
+                        description: `ชื่อ: ${interaction.user.tag}\nสร้างเมื่อ: <t:${Math.floor(interaction.user.createdTimestamp/1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(interaction.member.joinedTimestamp/1000)}:F>`
+                    }],
+                    ephemeral: true}
+                ) 
+                return;
+            }
             await interaction.reply(
-                    { content: `ชื่อ : ${interaction.user.tag}\nสร้างเมื่อ : <t:${Math.floor(interaction.user.createdTimestamp/1000)}:F>`,
+                    { embeds: [{
+                        title: `ข้อมูลของคุณ ${interaction.user.tag}`,
+                        thumbnail: {
+                            url: `${interaction.user.avatarURL({ extension: "png" })}`
+                        },
+                        description: `ชื่อ: ${interaction.user.tag}\nสร้างเมื่อ: <t:${Math.floor(interaction.user.createdTimestamp/1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(interaction.member.joinedTimestamp/1000)}:F>`
+                    }],
                     ephemeral: true}
             )
         }
