@@ -1,7 +1,7 @@
 const fs = require("node:fs")
 const path = require("node:path")
 const { Client, GatewayIntentBits } = require("discord.js")
-require("dotenv").config()
+require('dotenv').config()
 
 const client = new Client({ intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent]})
 
@@ -13,9 +13,11 @@ for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
 	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
+		client.once(event.name,
+			(...args) => event.execute(...args));
 	} else {
-		client.on(event.name, (...args) => event.execute(...args));
+		client.on(event.name,
+			(...args) => event.execute(...args));
 	}
 }
 
