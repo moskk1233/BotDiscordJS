@@ -1,4 +1,5 @@
 const { PermissionFlagsBits } = require("discord.js")
+const err_msg = require("./botmessage.json").error_message // Bot Error Messages
 
 module.exports = {
     name: 'interactionCreate',
@@ -10,7 +11,7 @@ module.exports = {
 
             if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
                 return await interaction.reply({
-                    content: `ขออภัยคุณไม่มีสิทธิ์ใช้คำสั่งนี้!`,
+                    content: `${err_msg[0]}`,
                     ephemeral: true
                 })
             }

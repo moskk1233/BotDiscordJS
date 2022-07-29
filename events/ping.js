@@ -5,7 +5,12 @@ module.exports = {
 
         // ส่งคำสั่ง ping
         if (interaction.commandName == "ping") {
-            await interaction.reply('pong')
+            await interaction.reply(
+                {
+                    content: `การตอบสนอง: ${interaction.client.ws.ping}ms\n**${interaction.client.user.tag}** ทำงานได้ตาม`,
+                    ephemeral: true
+                }
+            )
         }
     }
 }

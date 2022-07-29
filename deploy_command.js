@@ -5,26 +5,26 @@ require("dotenv").config()
 
 const commands = [
     new SlashCommandBuilder().setName("ping")
-    .setDescription("Reply Pong!"),
+    .setDescription("ตรวจสอบบทว่าทำงานได้ปกติหรือไม่"),
 
     new SlashCommandBuilder().setName("user")
-    .setDescription("Reply User Information")
+    .setDescription("ดูรายละเอียดของผู้ใช้งาน")
     .addUserOption(option => 
         option.setName("user")
-            .setDescription("Select user to show Information.")
+            .setDescription("เลือกผู้ใช้งานที่ต้องการดูรายละเอียด")
     ),
 
     new SlashCommandBuilder().setName("server")
-    .setDescription("Reply Server Information"),
+    .setDescription("ดูรายละเอียดของเซิฟเวอร์"),
 
     new SlashCommandBuilder().setName("bot")
-    .setDescription("Bot Information"),
+    .setDescription("ดูรายละเอียดของบอท"),
 
     new SlashCommandBuilder().setName("remove")
-    .setDescription("Remove Messages past 14 days")
+    .setDescription("ลบข้อความใน 14 วันที่ผ่านมา")
     .addNumberOption(number => 
         number.setName("count")
-        .setDescription("Count Messages to remove")
+        .setDescription("จำนวนข้อความที่ต้องการลบ")
         .setRequired(true)
         )
 ].map(command => command.toJSON())
@@ -32,9 +32,11 @@ const commands = [
 const rest = new REST({ version: "10"}).setToken(process.env.TOKEN)
 
 function PutCommand() {
-    console.log("กำลังทำการอัพโหลดคอมมานด์(/)")
+    console.log(`+-------------------+---+\n| Command Uploading |   |\n+-------------------+---+`)
     rest.put(Routes.applicationCommands(process.env.CLIENTID), { body: commands })
-    .then(() => console.log("อัพโหลดคอมมานด์(/)สำเค็จ"))
+    .then(() => {
+        console.log(`+-------------------+---+\n| Command Uploading | ✓ |\n+-------------------+---+\n`)
+    })
     .catch(console.error)
 }
 PutCommand()
