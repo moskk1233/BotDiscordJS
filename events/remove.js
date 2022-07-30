@@ -11,7 +11,10 @@ module.exports = {
 
             if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
                 return await interaction.reply({
-                    content: `${err_msg[0]}`,
+                    embeds: [{
+                        description: `${err_msg[0]}`,
+                        color: 0xeb4034
+                    }],
                     ephemeral: true
                 })
             }

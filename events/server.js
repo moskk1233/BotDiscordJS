@@ -13,7 +13,10 @@ module.exports = {
         if (interaction.commandName == "server") {
             if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
                 return await interaction.reply({
-                    content: `${err_msg[0]}`,
+                    embeds: [{
+                        description: `${err_msg[0]}`,
+                        color: 0xeb4034
+                    }],
                     ephemeral: true
                 })
             }
