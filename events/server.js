@@ -1,5 +1,5 @@
 const { PermissionFlagsBits } = require("discord.js")
-const err_msg = require("./botmessage.json").error_message // Bot Error Messages
+const { color, error_msg } = require("../config.json") // Bot Error Messages
 
 module.exports = {
     name: 'interactionCreate',
@@ -14,8 +14,8 @@ module.exports = {
             if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
                 return await interaction.reply({
                     embeds: [{
-                        description: `${err_msg[0]}`,
-                        color: 0xeb4034
+                        description: `${error_msg[0]}`,
+                        color: Number(color.red)
                     }],
                     ephemeral: true
                 })
@@ -29,7 +29,7 @@ module.exports = {
                             url: `${guildPreview.iconURL({ extension: 'png' })}`
                         },
                         description: `เจ้าของ: ${guildOwner.user.tag}\nสร้างเมื่อ: <t:${Math.floor(interaction.guild.createdTimestamp / 1000)}:F>\nมีสมาชิกทั้งหมด: ${interaction.guild.memberCount} แอคเคาท์\nมีจำนวนบทบาททั้งหมด: ${guildRoles.size} บทบาท\nมีจำนวนห้องแชท/ห้องเสียง: ${interaction.guild.channels.channelCountWithoutThreads} ห้อง`,
-                        color: 16777215
+                        color: Number(color.cyan)
                     }],
                     ephemeral: true
                 }

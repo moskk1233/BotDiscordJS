@@ -1,5 +1,5 @@
 const { PermissionFlagsBits } = require("discord.js")
-const err_msg = require("./botmessage.json").error_message // Bot Error Messages
+const { color, error_msg }= require("../config.json") 
 
 module.exports = {
     name: 'interactionCreate',
@@ -12,8 +12,8 @@ module.exports = {
             if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
                 return await interaction.reply({
                     embeds: [{
-                        description: `${err_msg[0]}`,
-                        color: 0xeb4034
+                        description: `${error_msg[0]}`,
+                        color: Number(color.red)
                     }],
                     ephemeral: true
                 })
@@ -23,12 +23,24 @@ module.exports = {
                 if (message_count > 0 && message_count <= 50) {
                     await interaction.channel.bulkDelete(message_count, true)
                     interaction.reply(
-                        { content: `${interaction.client.user.username} ได้ลบ ${message_count} ข้อความเรียบร้อยแล้ว` }
+                        { 
+                            embeds: [{
+                                description: `${interaction.client.user.username} ได้ลบ ${message_count} ข้อความเรียบร้อยแล้ว`,
+                                color: Number(color.green)
+                            }],
+                            ephemeral: true
+                        }
                     )
                     await sleep(2000)
                     await interaction.channel.lastMessage.delete()
                 } else {
-                    await interaction.reply("คุณไม่สามารถลบข้อความได้เนื่องจากคุณลบข้อความเกิน 50 ข้อความ")
+                    await interaction.reply({
+                        embeds: [{
+                            description: "คุณไม่สามารถลบข้อความได้เนื่องจากคุณลบข้อความเกิน 50 ข้อความ",
+                            color: Number(color.red),
+                        }],
+                        ephemeral: true
+                    })
                     await sleep(2000)
                     await interaction.channel.lastMessage.delete()
                 }

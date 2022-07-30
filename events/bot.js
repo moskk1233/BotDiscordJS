@@ -1,5 +1,4 @@
-const fs = require("node:fs")
-let random_msg = require("./botmessage.json").random_messages
+const { color, random_msg } = require("../config.json")
 
 module.exports = {
     name: 'interactionCreate',
@@ -15,7 +14,7 @@ module.exports = {
                         },
                         title: `ข้อมูลบอท ${interaction.client.user.tag}`,
                         description: `สร้างเมื่อ: <t:${Math.floor(interaction.client.user.createdTimestamp / 1000)}:F>\n\n*${random_msg[Math.floor(Math.random()*random_msg.length)]}*`,
-                        color: 57046
+                        color: Number(color.cyan)
                     }],
                     ephemeral: true
                 }

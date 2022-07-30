@@ -1,3 +1,5 @@
+const { color } = require("../config.json")
+
 module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {
@@ -13,7 +15,7 @@ module.exports = {
                                 {
                                     title: `ข้อมูลของคุณ ${getUserInfo.user.tag}`,
                                     description: `ชื่อ: ${getUserInfo.user.tag}\nสร้างเมื่อ: <t:${Math.floor(getUserInfo.user.createdTimestamp / 1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(getUserInfo.joinedTimestamp / 1000)}:F>`,
-                                    color: 16777215
+                                    color: Number(color.cyan)
                                 }
                             ],
                             ephemeral: true
@@ -30,7 +32,7 @@ module.exports = {
                                     url: `${getUserInfo.user.avatarURL({ extension: "png" })}`
                                 },
                                 description: `ชื่อ: ${getUserInfo.user.tag}\nสร้างเมื่อ: <t:${Math.floor(getUserInfo.user.createdTimestamp / 1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(getUserInfo.joinedTimestamp / 1000)}:F>`,
-                                color: 16777215
+                                color: Number(color.cyan)
                             }
                         ],
                         ephemeral: true
@@ -45,7 +47,7 @@ module.exports = {
                             embeds: [{
                                 title: `ข้อมูลของคุณ ${interaction.user.tag}`,
                                 description: `ชื่อ: ${interaction.user.tag}\nสร้างเมื่อ: <t:${Math.floor(interaction.user.createdTimestamp / 1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(interaction.member.joinedTimestamp / 1000)}:F>`,
-                                color: 16777215
+                                color: Number(color.cyan)
                             }],
                             ephemeral: true
                         }
@@ -60,7 +62,7 @@ module.exports = {
                                 url: `${interaction.user.avatarURL({ extension: "png" })}`
                             },
                             description: `ชื่อ: ${interaction.user.tag}\nสร้างเมื่อ: <t:${Math.floor(interaction.user.createdTimestamp / 1000)}:F>\nเข้าร่วมเซิฟเวอร์เมื่อ: <t:${Math.floor(interaction.member.joinedTimestamp / 1000)}:F>`,
-                            color: 16777215
+                            color: Number(color.cyan)
                         }],
                         ephemeral: true
                     }
