@@ -28,10 +28,9 @@ module.exports = {
                                 description: `${interaction.client.user.username} ได้ลบ ${message_count} ข้อความเรียบร้อยแล้ว`,
                                 color: Number(color.green)
                             }],
-                            ephemeral: true
                         }
                     )
-                    await sleep(2000)
+                    await sleep(2)
                     await interaction.channel.lastMessage.delete()
                 } else {
                     await interaction.reply({
@@ -39,9 +38,8 @@ module.exports = {
                             description: "คุณไม่สามารถลบข้อความได้เนื่องจากคุณลบข้อความเกิน 50 ข้อความ",
                             color: Number(color.red),
                         }],
-                        ephemeral: true
                     })
-                    await sleep(2000)
+                    await sleep(2)
                     await interaction.channel.lastMessage.delete()
                 }
             }
@@ -49,8 +47,15 @@ module.exports = {
     }
 }
 
-function sleep(ms) {
+
+/**
+ * sleep function is delay to wait.
+ * @param {number} time - Time in second
+ */
+
+function sleep(time) {
+    const second = time * 1000
     return new Promise((resolve) => {
-        setTimeout(resolve, ms);
+        setTimeout(resolve, second);
     });
 }

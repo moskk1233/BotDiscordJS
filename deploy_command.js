@@ -24,10 +24,21 @@ module.exports = {
 
         new SlashCommandBuilder().setName("remove")
         .setDescription("ลบข้อความใน 14 วันที่ผ่านมา")
-        .addNumberOption(number => 
-            number.setName("count")
+        .addNumberOption(number => number.setName("count")
             .setDescription("จำนวนข้อความที่ต้องการลบ")
             .setRequired(true)
+        ),
+
+        new SlashCommandBuilder().setName("play")
+        .setDescription("เล่นเพลง")
+        .addSubcommand(subcommand => subcommand
+            .setName("song")
+            .setDescription("เล่นเพลงที่ต้องการ")
+            .addStringOption(string => string
+                .setName("url")
+                .setDescription("ใส่ลิงค์เพลง")
+                .setRequired(true)
+            )
         )
     ].map(command => command.toJSON()),
 

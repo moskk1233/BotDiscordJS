@@ -3,8 +3,13 @@ const path = require("node:path")
 const { Client, GatewayIntentBits } = require("discord.js")
 require('dotenv').config()
 const command = require("./deploy_command")
+const { Player } = require("discord-player")
 
-const client = new Client({ intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent]})
+const client = new Client({ intents: [GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.Guilds,
+	GatewayIntentBits.MessageContent,
+	GatewayIntentBits.GuildVoiceStates
+]})
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
