@@ -1,9 +1,9 @@
 const fs = require("node:fs")
 const path = require("node:path")
-const { Client, GatewayIntentBits } = require("discord.js")
+const { Client, GatewayIntentBits, ActivityType, Collection } = require("discord.js")
 require('dotenv').config()
-const command = require("./deploy_command")
 const { Player } = require("discord-player")
+const { error_msg, color } = require("./config.json")
 
 const client = new Client({ intents: [GatewayIntentBits.GuildMessages,
 	GatewayIntentBits.Guilds,
@@ -11,24 +11,41 @@ const client = new Client({ intents: [GatewayIntentBits.GuildMessages,
 	GatewayIntentBits.GuildVoiceStates
 ]})
 
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+client.commands = new Collection
 
-command.putCommand() // อัพโหลดคอมมานด์
-
-// ใช้คำสั่งทำงาน
-
-for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name,
-			(...args) => event.execute(...args));
-	} else {
-		client.on(event.name,
-			(...args) => event.execute(...args));
-	}
+/* ค้นหาไฟล์ command-handler */
+const commandsPath = path.join(__dirname, "command_handler")
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"))
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file)
+    const command = require(filePath)
+    client.commands.set(command.data.name, command)
 }
 
-// เริ่มต้นบอท
+/* ใช้คำสั่งทำงาน */
+client.once('ready',() => {
+	console.log(`เปิดใช้งานบอท ${client.user.tag}`)
+	client.user.setActivity({ name: "Yaho~", type: ActivityType.Watching })
+})
+
+client.on("interactionCreate", async interaction => {
+	if (!interaction.isChatInputCommand()) return
+
+	const command = client.commands.get(interaction.commandName)
+	if (!command) return
+
+	try {
+		await command.execute(interaction)
+	} catch(err) {
+		console.log(err)
+		await interaction.reply({
+			embeds: [{
+				description: `${error_msg[1]}`,
+				color: Number(color.error)
+			}]
+		})
+	}
+})
+
+/* เริ่มต้นบอท */
 client.login(process.env.TOKEN)
