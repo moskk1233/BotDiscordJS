@@ -2,7 +2,6 @@ const fs = require("node:fs")
 const path = require("node:path")
 const { Client, GatewayIntentBits, ActivityType, Collection } = require("discord.js")
 require('dotenv').config()
-const { Player } = require("discord-player")
 const { error_msg, color } = require("./config.json")
 
 const client = new Client({ intents: [GatewayIntentBits.GuildMessages,

@@ -9,7 +9,7 @@ module.exports = {
         await interaction.reply(
             {
                 embeds: [{
-                    description: `การตอบสนอง: ${interaction.client.ws.ping}ms\n**${interaction.client.user.tag}** ทำงานได้ตาม`,
+                    description: `การตอบสนอง: ${interaction.client.ws.ping}ms\n**${interaction.client.user.tag}** ทำงานได้ตามปกติ`,
                     color: Number(color.action)
                 }],
                 ephemeral: true
