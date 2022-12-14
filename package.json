@@ -2,9 +2,9 @@
   "name": "discordjs",
   "version": "1.0.0",
   "description": "��#\u0000 \u0000D\u0000i\u0000s\u0000c\u0000o\u0000r\u0000d\u0000B\u0000o\u0000t\u0000p\u0000y\u0000",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "bot": "node ./deploy_command.js && node ./app.js"
+    "bot": "node ."
   },
   "repository": {
     "type": "git",
