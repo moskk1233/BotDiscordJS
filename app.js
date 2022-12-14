@@ -10,6 +10,8 @@ const client = new Client({ intents: [GatewayIntentBits.GuildMessages,
 	GatewayIntentBits.GuildVoiceStates
 ]})
 
+module.exports = client;
+
 client.commands = new Collection
 
 /* ค้นหาไฟล์ command-handler */
@@ -46,5 +48,16 @@ client.on("interactionCreate", async interaction => {
 	}
 })
 
+/* Events */
+try {
+	const eventfiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"))
+	eventfiles.forEach(file => require(`${__dirname}/events/${file}`))
+}
+catch(err) {
+	console.log(err)
+}
+/* ทำงานคำสั่งสร้าง SlashCommand */
+require("./deploy_command");
+
 /* เริ่มต้นบอท */
-client.login(process.env.TOKEN)
+client.login(process.env.TOKEN);
